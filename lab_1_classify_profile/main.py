@@ -6,6 +6,7 @@ Language detection
 
 # pylint:disable=unused-argument
 from typing import Sequence
+from collections.abc import Sequence as ABCSequence
 
 FreqDictType = dict[str, float]
 "Frequency dictionary. Contains pairs of token and its frequency."
@@ -30,11 +31,8 @@ def tokenize(text: str) -> Sequence[str] | None:
         return None
     tokens = []
     for word in text.split():
-        clean_word = ""
-        for letter in word:
-            if letter.isalpha():
-                clean_word += letter
-        if clean_word != "":
+        clean_word = "".join(letter for letter in word if letter.isalpha())
+        if clean_word:
             tokens.append(clean_word.lower())
     return tokens
 
@@ -51,17 +49,15 @@ def remove_stop_words(tokens: Sequence[str], stop_words: Sequence[str]) -> Seque
         Sequence[str] | None: Sequence of tokens without stop words.
         Returns None in case of incorrect input types.
     """
-    if tokens is None or not isinstance(tokens, (list, tuple)):
+    if tokens is None or not isinstance(tokens, ABCSequence):
         return None
-    if not isinstance(stop_words, (list, tuple)):
+    if not isinstance(stop_words, ABCSequence):
         return None
-    for token in tokens:
-        if not isinstance(token, str):
-            return None
-    for word in stop_words:
-        if not isinstance(word, str):
-            return None
-    if len(stop_words) == 0:
+    if not all(isinstance(token, str) for token in tokens):
+        return None
+    if not all(isinstance(word, str) for word in stop_words):
+        return None
+    if not stop_words:
         return tokens
     result = []
     for token in tokens:
