@@ -18,11 +18,11 @@ Integers and float data.
 # Create numbers
 a = 10  # int
 b = 3.5  # float
-"print(a, b)"
+print(a, b)
 
 # Basic arithmetic operations
-"print(a + b)  # addition
-"print(a - b)  # subtraction
+print(a + b)  # addition
+print(a - b)  # subtraction
 print(a * b)  # multiplication
 print(a / b)  # division (always float)
 print(a // 3)  # integer division
@@ -213,7 +213,6 @@ def fibonacci(n: int) -> int:
         return 0
     if n==1:
         return 1
-    for i in range(2,)
 
 
 # fibonacci(0) → 0
