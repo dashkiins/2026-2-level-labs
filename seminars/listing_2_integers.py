@@ -221,8 +221,7 @@ def fibonacci(n: int) -> int:
 
 # Task 9 (advanced):
 def is_prime(n: int) -> bool:
-
-   """ Check if a number is prime.
+    """ Check if a number is prime.
 
     Args:
         n (int): Integer greater than or equal to 2
