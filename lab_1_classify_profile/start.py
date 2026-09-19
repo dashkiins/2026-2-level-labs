@@ -27,8 +27,10 @@ def main() -> None:
     tokens = tokenize(de_text)
     clean_tokens = remove_stop_words(tokens, stopwords)
     freq = calculate_frequencies(clean_tokens)
-    top_7 = get_top_n_words(freq, 7)
-    print(top_7)
+    result = get_top_n_words(freq, 7)
+    print(result)
+
+    assert result, "Demo does not work correctly"
 
 
 if __name__ == "__main__":

@@ -204,6 +204,7 @@ def compare_profiles_by_top_n(
         float | None: The distance between profiles.
         Returns None in case of incorrect input types.
     """
+    return None
 
 
 def detect_language_by_top_n(
@@ -222,6 +223,7 @@ def detect_language_by_top_n(
         str | None: Unknown profile language.
         Returns None in case of incorrect input types.
     """
+    return None
 
 
 # Mark 8
@@ -240,6 +242,7 @@ def calculate_mse(predicted: Sequence[float], actual: Sequence[float]) -> float 
         Returns None in case of incorrect input types or mismatched length.
         In case of empty inputs, returns 0.0.
     """
+    return None
 
 
 def compare_profiles_by_mse(
@@ -257,6 +260,7 @@ def compare_profiles_by_mse(
         float | None: The distance between the profiles.
         In case of corrupt input arguments or invalid profile structure, None is returned.
     """
+    return None
 
 
 def detect_language_by_mse(
@@ -275,6 +279,7 @@ def detect_language_by_mse(
         str | None: Unknown profile language.
         Returns None in case of incorrect input types.
     """
+    return None
 
 
 # Mark 10
@@ -292,6 +297,7 @@ def save_profile(profile: ProfileType, save_path: str) -> bool:
         bool: False in case of incorrect input types or if the profile
         is missing obligatory keys. True if the profile is saved.
     """
+    return False
 
 
 def load_profile(path_to_file: str) -> ProfileType | None:
@@ -305,6 +311,7 @@ def load_profile(path_to_file: str) -> ProfileType | None:
         ProfileType | None: Loaded profile.
         Returns None in case of incorrect input types.
     """
+    return None
 
 
 def collect_profiles(paths_to_profiles: Sequence[str]) -> Sequence[ProfileType] | None:
@@ -318,6 +325,7 @@ def collect_profiles(paths_to_profiles: Sequence[str]) -> Sequence[ProfileType] 
         Sequence[ProfileType] | None: Sequence of loaded profiles.
         Returns None in case of incorrect input types.
     """
+    return None
 
 
 def detect_language_advanced(
@@ -338,6 +346,7 @@ def detect_language_advanced(
         The sequence is sorted by best MSE value, then by best Top-N value.
         Returns None in case of incorrect input types.
     """
+    return None
 
 
 def print_report(
@@ -354,3 +363,4 @@ def print_report(
 
     In case of incorrect type inputs, does not print anything.
     """
+    return None

@@ -186,8 +186,8 @@ def distance(x1: float, y1: float, x2: float, y2: float) -> float:
         float: Euclidean distance between the two points
     """
     # student implementation goes here
-    result = pow(((x2-x1)**2 + (y2 - y1)**2), 0.5)
-    return(result)
+    result = pow(((x2 - x1) ** 2 + (y2 - y1) ** 2), 0.5)
+    return float(result)
 
 
 print(distance(0, 0, 3, 0))
@@ -206,13 +206,11 @@ def fibonacci(n: int) -> int:
     Returns:
         int: n-th Fibonacci number
     """
-    # student implementation goes here
-    first = 0
-    second = 1
-    if n==0:
+    if n == 0:
         return 0
-    if n==1:
+    if n == 1:
         return 1
+    return 0
 
 
 # fibonacci(0) → 0
