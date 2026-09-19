@@ -204,7 +204,7 @@ def compare_profiles_by_top_n(
         float | None: The distance between profiles.
         Returns None in case of incorrect input types.
     """
-    return None
+    return 0.0
 
 
 def detect_language_by_top_n(
@@ -223,7 +223,7 @@ def detect_language_by_top_n(
         str | None: Unknown profile language.
         Returns None in case of incorrect input types.
     """
-    return None
+    return ""
 
 
 # Mark 8
@@ -242,7 +242,7 @@ def calculate_mse(predicted: Sequence[float], actual: Sequence[float]) -> float 
         Returns None in case of incorrect input types or mismatched length.
         In case of empty inputs, returns 0.0.
     """
-    return None
+    return 0.0
 
 
 def compare_profiles_by_mse(
@@ -260,7 +260,7 @@ def compare_profiles_by_mse(
         float | None: The distance between the profiles.
         In case of corrupt input arguments or invalid profile structure, None is returned.
     """
-    return None
+    return 0.0
 
 
 def detect_language_by_mse(
@@ -279,7 +279,7 @@ def detect_language_by_mse(
         str | None: Unknown profile language.
         Returns None in case of incorrect input types.
     """
-    return None
+    return ""
 
 
 # Mark 10
@@ -311,7 +311,7 @@ def load_profile(path_to_file: str) -> ProfileType | None:
         ProfileType | None: Loaded profile.
         Returns None in case of incorrect input types.
     """
-    return None
+    return ("", {}, 0)
 
 
 def collect_profiles(paths_to_profiles: Sequence[str]) -> Sequence[ProfileType] | None:
@@ -325,7 +325,7 @@ def collect_profiles(paths_to_profiles: Sequence[str]) -> Sequence[ProfileType] 
         Sequence[ProfileType] | None: Sequence of loaded profiles.
         Returns None in case of incorrect input types.
     """
-    return None
+    return []
 
 
 def detect_language_advanced(
@@ -346,7 +346,7 @@ def detect_language_advanced(
         The sequence is sorted by best MSE value, then by best Top-N value.
         Returns None in case of incorrect input types.
     """
-    return None
+    return []
 
 
 def print_report(
@@ -363,4 +363,4 @@ def print_report(
 
     In case of incorrect type inputs, does not print anything.
     """
-    return None
+    pass
