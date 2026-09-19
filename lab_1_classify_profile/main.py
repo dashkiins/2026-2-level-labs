@@ -119,7 +119,6 @@ def get_top_n_words(freq_dict: dict[str, float], top_n: int) -> Sequence[str] | 
     if not freq_dict:
         return []
     words = list(freq_dict.keys())
-    words.sort()
     words.sort(key=lambda w: (-freq_dict[w], w))
     return words[:top_n]
 
@@ -179,14 +178,14 @@ def check_profile(profile: ProfileType) -> bool:
     if not isinstance(profile, tuple) or len(profile) != 3:
         return False
     name, freq, n_words = profile
-    return(
+    return (
         isinstance(name, str)
         and isinstance(freq, dict)
         and not isinstance(n_words, bool)
         and isinstance(n_words, int)
         and all(isinstance(key, str) for key in freq)
         and all(isinstance(value, float) for value in freq.values())
-        )
+    )
 
 
 
