@@ -6,7 +6,6 @@ Language detection
 
 # pylint:disable=unused-argument
 from typing import Sequence
-from collections.abc import Sequence as ABCSequence
 
 FreqDictType = dict[str, float]
 "Frequency dictionary. Contains pairs of token and its frequency."
@@ -49,9 +48,9 @@ def remove_stop_words(tokens: Sequence[str], stop_words: Sequence[str]) -> Seque
         Sequence[str] | None: Sequence of tokens without stop words.
         Returns None in case of incorrect input types.
     """
-    if tokens is None or not isinstance(tokens, ABCSequence):
+    if tokens is None or not isinstance(tokens, (list, tuple, str)):
         return None
-    if not isinstance(stop_words, ABCSequence):
+    if not isinstance(stop_words, (list, tuple, str)):
         return None
     if not all(isinstance(token, str) for token in tokens):
         return None
@@ -76,7 +75,7 @@ def calculate_frequencies(tokens: Sequence[str]) -> dict[str, float] | None:
         dict[str, float] | None: Dictionary with frequencies.
         Returns None in case of incorrect input types.
     """
-    if tokens is None or not isinstance(tokens, ABCSequence):
+    if tokens is None or not isinstance(tokens, (list, tuple, str)):
         return None
     if not all(isinstance(token, str) for token in tokens):
         return None
@@ -85,10 +84,9 @@ def calculate_frequencies(tokens: Sequence[str]) -> dict[str, float] | None:
     total = len(tokens)
     freq = {}
     for token in tokens:
-        if token in freq:
-            freq[token] += 1
-        else:
-            freq[token] = 1
+        if token not in freq:
+            freq[token] = 0
+        freq[token] += 1
     for token in freq:
         freq[token] = freq[token] / total
     return freq
@@ -110,15 +108,19 @@ def get_top_n_words(freq_dict: dict[str, float], top_n: int) -> Sequence[str] | 
         Sequence[str] | None: Sequence of the most common words.
         Returns None in case of incorrect input types or non-positive top_n.
     """
-    if not isinstance(freq_dict, dict):
-        return None
-    if not isinstance(top_n, int) or top_n <= 0:
+    if (
+        not isinstance(freq_dict, dict)
+        or not all(isinstance(key, str) for key in freq_dict)
+        or not all(isinstance(value, (int, float)) for value in freq_dict.values())
+        or not isinstance(top_n, int)
+        or top_n <= 0
+    ):
         return None
     if not freq_dict:
         return []
     words = list(freq_dict.keys())
     words.sort()
-    words.sort(key=lambda w: freq_dict[w], reverse = True)
+    words.sort(key=lambda w: (-freq_dict[w], w))
     return words[:top_n]
 
 
@@ -142,11 +144,12 @@ def create_language_profile(
         ProfileType | None: Language profile.
         Returns None in case of incorrect input types.
     """
-    if not isinstance(language, str):
-        return None
-    if not isinstance(text, str):
-        return None
-    if not isinstance(stop_words, ABCSequence):
+    if (
+        not isinstance(language, str)
+        or not isinstance(text, str)
+        or not isinstance(stop_words, (list, tuple, str))
+        or not all(isinstance(word, str) for word in stop_words)
+    ):
         return None
 
     tokens = tokenize(text)
@@ -158,7 +161,7 @@ def create_language_profile(
     freq = calculate_frequencies(clean_tokens)
     if freq is None:
         return None
-    return (language, freq, len(freq))
+    return language, freq, len(freq)
 
 
 
