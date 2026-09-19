@@ -3,12 +3,13 @@ Language detection starter.
 """
 
 # pylint: disable=unused-variable, duplicate-code
-from lab_1_classify_profile.main import(
-    tokenize,
-    remove_stop_words,
+from lab_1_classify_profile.main import (
     calculate_frequencies,
     get_top_n_words,
+    remove_stop_words,
+    tokenize,
 )
+
 
 def main() -> None:
     """
