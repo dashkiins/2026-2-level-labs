@@ -363,4 +363,3 @@ def print_report(
 
     In case of incorrect type inputs, does not print anything.
     """
-    pass
