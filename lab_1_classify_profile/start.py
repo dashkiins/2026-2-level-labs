@@ -3,7 +3,7 @@ Language detection starter.
 """
 
 # pylint: disable=unused-variable, duplicate-code
-from main import(
+from lab_1_classify_profile.main import(
     tokenize,
     remove_stop_words,
     calculate_frequencies,
@@ -28,9 +28,6 @@ def main() -> None:
     freq = calculate_frequencies(clean_tokens)
     top_7 = get_top_n_words(freq, 7)
     print(top_7)
-
-    result = None
-    assert result, "Detection result is None"
 
 
 if __name__ == "__main__":
