@@ -29,8 +29,14 @@ def main() -> None:
 
 
     tokens = tokenize(de_text)
+    if tokens is None:
+        return
     clean_tokens = remove_stop_words(tokens, stopwords)
+    if clean_tokens is None:
+        return
     freq = calculate_frequencies(clean_tokens)
+    if freq is None:
+        return
     result = get_top_n_words(freq, 7)
     print(result)
     assert result, "Demo does not work correctly"
@@ -39,6 +45,8 @@ def main() -> None:
     unknown_profile = create_language_profile("unknown", unknown_text, stopwords)
     en_profile = create_language_profile("en", en_text, stopwords)
     de_profile = create_language_profile("de", de_text, stopwords)
+    if unknown_profile is None or en_profile is None or de_profile is None:
+        return
 
     detected = detect_language_by_top_n(unknown_profile, en_profile, de_profile, 15)
     print(f"Detected language: {detected}")
