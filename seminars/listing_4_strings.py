@@ -152,7 +152,7 @@ def extra_end(input_string: str) -> str:
         str: Resulting string
     """
     # student implementation goes here
-    return extra_end[-2:] * 3
+    return input_string[-2:] * 3
 
 
 # extra_end('Hello') → 'lololo'

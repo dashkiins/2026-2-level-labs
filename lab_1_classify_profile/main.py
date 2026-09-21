@@ -225,7 +225,11 @@ def detect_language_by_top_n(
         str | None: Unknown profile language.
         Returns None in case of incorrect input types.
     """
-    if not check_profile(unknown_profile) or not check_profile(profile_1) or not check_profile(profile_2):
+    if (
+        not check_profile(unknown_profile)
+        or not check_profile(profile_1)
+        or not check_profile(profile_2)
+    ):
         return None
 
     score_1 = compare_profiles_by_top_n(unknown_profile, profile_1, top_n)
