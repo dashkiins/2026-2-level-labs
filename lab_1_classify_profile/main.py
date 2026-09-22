@@ -202,10 +202,7 @@ def compare_profiles_by_top_n(
     if not unknown_top:
         return 0.0
 
-    common = 0
-    for word in unknown_top:
-        if word in compare_top:
-            common += 1
+    common = sum(1 for word in unknown_top if word in compare_top)
     return common / len(unknown_top)
 
 
@@ -307,18 +304,11 @@ def compare_profiles_by_mse(
 
     predicted = []
     actual = []
+
     for token in all_tokens:
-        if token in freq_1:
-            predicted.append(freq_1[token])
-        else:
-            predicted.append(0.0)
-        if token in freq_2:
-            actual.append(freq_2[token])
-        else:
-            actual.append(0.0)
-
+        predicted.append(freq_1.get(token, 0.0))
+        actual.append(freq_2.get(token, 0.0))
     return calculate_mse(predicted, actual)
-
 
 def detect_language_by_mse(
     unknown_profile: ProfileType, profile_1: ProfileType, profile_2: ProfileType
