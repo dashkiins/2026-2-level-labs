@@ -202,7 +202,7 @@ def compare_profiles_by_top_n(
     if not unknown_top:
         return 0.0
 
-    common = sum(1 for word in unknown_top if word in compare_top)
+    common = len(set(unknown_top) & set(compare_top))
     return common / len(unknown_top)
 
 
@@ -259,8 +259,6 @@ def calculate_mse(predicted: Sequence[float], actual: Sequence[float]) -> float 
         not isinstance(predicted, (list, tuple))
         or not isinstance(actual, (list, tuple))
         or len(predicted) != len(actual)
-        or not all(isinstance(x, (int, float)) and not isinstance(x, bool) for x in predicted)
-        or not all(isinstance(x, (int, float)) and not isinstance(x, bool) for x in actual)
     ):
         return None
     if not predicted and not actual:
@@ -268,6 +266,10 @@ def calculate_mse(predicted: Sequence[float], actual: Sequence[float]) -> float 
 
     total = 0.0
     for p, y in zip(predicted, actual):
+        if not isinstance(p, (int, float)) or isinstance(p, bool):
+            return None
+        if not isinstance(y, (int, float)) or isinstance(y, bool):
+            return None
         total += (y - p) ** 2
 
     return total / len(predicted)
@@ -297,10 +299,7 @@ def compare_profiles_by_mse(
     tokens_1 = list(freq_1.keys())
     tokens_2 = list(freq_2.keys())
 
-    all_tokens = tokens_1
-    for token in tokens_2:
-        if token not in all_tokens:
-            all_tokens.append(token)
+    all_tokens = list(set(tokens_1 + tokens_2))
 
     predicted = []
     actual = []
