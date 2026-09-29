@@ -121,6 +121,8 @@ def get_top_n_words(freq_dict: dict[str, float], top_n: int) -> Sequence[str] | 
     return sorted_list
 
 # Mark 6.
+
+
 def create_language_profile(
     language: str, text: str, stop_words: Sequence[str]
 ) -> ProfileType | None:
@@ -280,19 +282,10 @@ def detect_language_by_top_n(
 
     return sorted_list[0]
 
-    score_1 = compare_profiles_by_top_n(unknown_profile, profile_1, top_n)
-    score_2 = compare_profiles_by_top_n(unknown_profile, profile_2, top_n)
-
-    if score_1 is None or score_2 is None:
-        return None
-
-    if score_1 > score_2:
-        return profile_1[0]
-    if score_2 > score_1:
-        return profile_2[0]
-    return min(profile_1[0], profile_2[0])
 
 # Mark 8
+
+
 def calculate_mse(predicted: Sequence[float], actual: Sequence[float]) -> float | None:
     """
     Calculates mean squared error between predicted and actual values.
@@ -383,21 +376,6 @@ def compare_profiles_by_mse(
 
     return calculate_mse(list_of_mse_unk, list_of_mse_sec)
 
-    freq_1 = unknown_profile[1]
-    freq_2 = profile_to_compare[1]
-
-    tokens_1 = list(freq_1.keys())
-    tokens_2 = list(freq_2.keys())
-
-    all_tokens = list(set(tokens_1 + tokens_2))
-
-    predicted = []
-    actual = []
-
-    for token in all_tokens:
-        predicted.append(freq_1.get(token, 0.0))
-        actual.append(freq_2.get(token, 0.0))
-    return calculate_mse(predicted, actual)
 
 def detect_language_by_mse(
     unknown_profile: ProfileType, profile_1: ProfileType, profile_2: ProfileType
