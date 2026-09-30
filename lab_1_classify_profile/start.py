@@ -5,7 +5,6 @@ Language detection starter.
 # pylint: disable=unused-variable, duplicate-code, too-many-locals
 from lab_1_classify_profile.main import (
     calculate_frequencies,
-    calculate_mse,
     create_language_profile,
     detect_language_by_mse,
     detect_language_by_top_n,
