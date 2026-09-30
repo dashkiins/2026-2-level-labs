@@ -2,7 +2,7 @@
 Language detection starter.
 """
 
-# pylint: disable=unused-variable, duplicate-code
+# pylint: disable=unused-variable, duplicate-code, too-many-locals
 from lab_1_classify_profile.main import (
     calculate_frequencies,
     calculate_mse,
@@ -68,7 +68,8 @@ def main() -> None:
 
     print(f'MSE: {mse_val}')
     print(f'RMSE: {rmse_val}')
-    print(f'RMSE = sqrt(MSE): {mse_val ** 0.5}')
+    if mse_val is not None:
+        print(f'RMSE = sqrt(MSE): {mse_val ** 0.5}')
 
 if __name__ == "__main__":
     main()

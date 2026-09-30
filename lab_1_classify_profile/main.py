@@ -329,11 +329,22 @@ def calculate_mse(predicted: Sequence[float], actual: Sequence[float]) -> float 
 
 
 def calculate_rmse(predicted: Sequence[float], actual: Sequence[float]) -> float | None:
-    mse = calculate_mse (predicted, actual)
+    """
+    Calculates root mean squared error between predicted and actual values.
+
+    Args:
+        predicted (Sequence[float]): Sequence of predicted values
+        actual (Sequence[float]): Sequence of actual values
+
+    Returns:
+        float | None: The score
+        Returns None in case of incorrect input types or mismatched length.
+        In case of empty inputs, returns 0.0.
+    """
+    mse = calculate_mse(predicted, actual)
     if mse is None:
         return None
-    return mse ** 0.5
-
+    return float(mse) ** 0.5
 
 
 def compare_profiles_by_mse(
