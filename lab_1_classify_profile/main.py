@@ -344,7 +344,8 @@ def calculate_rmse(predicted: Sequence[float], actual: Sequence[float]) -> float
     mse = calculate_mse(predicted, actual)
     if mse is None:
         return None
-    return float(mse) ** 0.5
+    assert isinstance(mse, float)
+    return mse ** 0.5
 
 
 def compare_profiles_by_mse(
