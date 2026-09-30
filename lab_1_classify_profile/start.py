@@ -6,7 +6,6 @@ Language detection starter.
 from lab_1_classify_profile.main import (
     calculate_frequencies,
     calculate_mse,
-    calculate_rmse,
     create_language_profile,
     detect_language_by_mse,
     detect_language_by_top_n,
@@ -56,20 +55,6 @@ def main() -> None:
     detected_mse = detect_language_by_mse(unknown_profile, en_profile, de_profile)
     print(f"Detected language by MSE: {detected_mse}")
 
-    print()
-    print('MSE vs RMSE')
-    freq_1 = unknown_profile[1]
-    freq_2 = en_profile[1]
-    all_tokens = list(set(list(freq_1.keys()) + list(freq_2.keys())))
-    predicted = [freq_1.get(token, 0.0) for token in all_tokens]
-    actual = [freq_2.get(token, 0.0) for token in all_tokens]
-    mse_val = calculate_mse(predicted, actual)
-    rmse_val = calculate_rmse(predicted, actual)
-
-    print(f'MSE: {mse_val}')
-    print(f'RMSE: {rmse_val}')
-    if mse_val is not None:
-        print(f'RMSE = sqrt(MSE): {mse_val ** 0.5}')
 
 if __name__ == "__main__":
     main()
