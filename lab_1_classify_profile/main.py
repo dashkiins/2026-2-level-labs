@@ -328,6 +328,14 @@ def calculate_mse(predicted: Sequence[float], actual: Sequence[float]) -> float 
     return sum(diffs) / len(actual)
 
 
+def calculate_rmse(predicted: Sequence[float], actual: Sequence[float]) -> float | None:
+    mse = calculate_mse (predicted, actual)
+    if mse is None:
+        return None
+    return mse ** 0.5
+
+
+
 def compare_profiles_by_mse(
     unknown_profile: ProfileType, profile_to_compare: ProfileType
 ) -> float | None:
@@ -375,6 +383,7 @@ def compare_profiles_by_mse(
         ]
 
     return calculate_mse(list_of_mse_unk, list_of_mse_sec)
+
 
 
 def detect_language_by_mse(
