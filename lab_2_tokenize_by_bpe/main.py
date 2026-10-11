@@ -176,15 +176,7 @@ def train(
             break
         # если доступных для слияния пар токенов не осталось, то обучение должно прекратиться
 
-        best_pair = None
-        best_key = None
-
-        for pair, freq in pairs.items():
-            merged = pair[0] + pair[1]
-            key = (freq, len(merged), [-ord(c) for c in merged])
-            if best_key is None or key > best_key:
-                best_key = key
-                best_pair = pair
+        best_pair = sorted(pairs, key=lambda p: (-pairs[p], -len(p[0] + p[1]), p[0] + p[1]))[0]
 
         word_frequencies = merge_tokens(word_frequencies, best_pair)
         if word_frequencies is None:
@@ -209,6 +201,9 @@ def get_vocabulary(
 
     In case of corrupt input arguments, None is returned
     """
+    if not isinstance(word_frequencies, dict) or not isinstance(unknown_token, str):
+        return None
+
 
 
 def decode(
