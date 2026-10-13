@@ -126,11 +126,16 @@ def merge_tokens(
 
     In case of corrupt input arguments, None is returned
     """
-    if not isinstance(word_frequencies, dict) or not isinstance(pair, tuple):
+    if (
+        not isinstance(word_frequencies, dict)
+        or not isinstance(pair, tuple)
+    ):
         return None
+
     merged = pair[0] + pair[1]
 
     new_frequencies = {}
+
     for word, count in word_frequencies.items():
         new_word = []
         i = 0
@@ -141,10 +146,11 @@ def merge_tokens(
             else:
                 new_word.append(word[i])
                 i += 1
-        new_frequencies[tuple(new_word)] = count
+
+        key = tuple(new_word)
+        new_frequencies[key] = new_frequencies.get(key, 0) + count
 
     return new_frequencies
-
 
 
 def train(
@@ -185,6 +191,7 @@ def train(
     return word_frequencies
 
 
+
 def get_vocabulary(
     word_frequencies: dict[tuple[str, ...], int], unknown_token: str
 ) -> dict[str, int] | None:
@@ -204,6 +211,45 @@ def get_vocabulary(
     if not isinstance(word_frequencies, dict) or not isinstance(unknown_token, str):
         return None
 
+    all_tokens = []
+
+    for word in word_frequencies:
+        if not isinstance(word, tuple):
+            return None
+
+        for token in word:
+            if not isinstance(token, str):
+                return None
+
+            if token and token not in all_tokens:
+                all_tokens.append(token)
+
+    if unknown_token and unknown_token not in all_tokens:
+        all_tokens.append(unknown_token)
+
+    all_tokens.sort()
+    all_tokens.sort(key=len, reverse=True)
+
+    characters = set()
+
+    for word in word_frequencies:
+        for token in word:
+            for ch in token:
+                characters.add(ch)
+
+    characters = {
+        ch for ch in characters
+        if ch not in all_tokens
+    }
+
+    sorted_characters = sorted(characters)
+    all_tokens.extend(sorted_characters)
+
+    vocab = {}
+    for idx, token in enumerate(all_tokens):
+        vocab[token] = idx
+
+    return vocab
 
 
 def decode(
@@ -225,6 +271,33 @@ def decode(
 
     In case of corrupt input arguments, None is returned
     """
+    if encoded_text is None or vocabulary is None:
+        return None
+    if not isinstance(encoded_text, (list, tuple)) or not isinstance(vocabulary, dict):
+        return None
+    if not encoded_text:
+        return None
+    if end_of_word_token is not None and not isinstance(end_of_word_token, str):
+        return None
+
+    reversed_vocab = {}
+    for token, idx in vocabulary.items():
+        reversed_vocab[idx] = token
+
+    result = []
+    for idx in encoded_text:
+        if not isinstance(idx, int):
+            return None
+        if idx not in reversed_vocab:
+            return None
+        token = reversed_vocab[idx]
+
+        if end_of_word_token is not None and token == end_of_word_token:
+            result.append(' ')
+        else:
+            result.append(token)
+
+    return ''.join(result)
 
 
 def tokenize_word(

@@ -221,14 +221,14 @@ print("*" * 15 + " TASKS " + "*" * 15)
 # spider.introduce()  # Hi! My name is Spider and I have 8 legs
 
 
-# Task 4
-# medium level
-# class Student:
-#     """
-#     If I have less than three deadlines, my mood is Good!
-#     If I have from 3 to 5 deadlines, my mood is So-so...
-#     If I have more than 5 deadlines, my mood is Bad!!!
-#     """
+#Task 4
+#medium level
+class Student:
+  """
+    If I have less than three deadlines, my mood is Good!
+    If I have from 3 to 5 deadlines, my mood is So-so...
+    If I have more than 5 deadlines, my mood is Bad!!!
+    """
 
 
 # implement a class so that the following code works

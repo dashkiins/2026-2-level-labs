@@ -174,6 +174,7 @@ def use_global() -> int:
     # student implementation goes here
 
 
+
 # use_global() -> 5
 
 
