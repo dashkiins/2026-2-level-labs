@@ -9,7 +9,9 @@ from lab_2_tokenize_by_bpe.main import (
     collect_frequencies,
     train,
     get_vocabulary,
-    decode
+    decode,
+    load_vocabulary,
+    encode
 )
 
 def main() -> None:
@@ -42,7 +44,20 @@ def main() -> None:
     decoded = decoded.replace('\u2581', ' ')
     print(decoded)
 
-    result = None
+    vocab = load_vocabulary("lab_2_tokenize_by_bpe/assets/vocab.json")
+    if vocab is None:
+        return
+
+    with open("lab_2_tokenize_by_bpe/assets/ru_raw.txt", "r", encoding="utf-8") as f:
+        ru_text = f.read()
+
+    encoded = encode(ru_text, vocab, '\u2581', None, '<unk>')
+    if encoded is None:
+        return
+
+    print(encoded[:20])
+
+    result = encoded
     assert result, "Translation not working"
 
 

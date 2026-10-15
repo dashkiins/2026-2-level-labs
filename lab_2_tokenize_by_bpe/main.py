@@ -6,7 +6,7 @@ BPE and machine translation evaluation
 
 # pylint:disable=unused-argument
 from typing import Sequence
-
+import json
 
 def prepare_word(
     raw_word: str, start_of_word: str | None, end_of_word: str | None
@@ -39,7 +39,6 @@ def prepare_word(
         result.append(end_of_word)
 
     return tuple(result)
-
 
 
 def collect_frequencies(
@@ -190,7 +189,6 @@ def train(
     return word_frequencies
 
 
-
 def get_vocabulary(
     word_frequencies: dict[tuple[str, ...], int], unknown_token: str
 ) -> dict[str, int] | None:
@@ -315,6 +313,56 @@ def tokenize_word(
 
     In case of corrupt input arguments, None is returned
     """
+    if (
+        not isinstance(word, tuple)
+        or not isinstance(vocabulary, dict)
+        or not isinstance(unknown_token, str)
+        or (end_of_word is not None and not isinstance(end_of_word, str))
+    ):
+        return None
+
+    text = ''.join(word)
+
+    sorted_tokens = sorted(vocabulary, key=lambda t: (-len(t), t))
+    unknown_id = vocabulary.get(unknown_token, 0)
+
+    used = [False] * len(text)
+    segments = []
+
+    for token in sorted_tokens:
+        if token == '':
+            continue
+
+        token_length = len(token)
+
+        for start in range(len(text) - token_length + 1):
+            if any(used[start + offset] for offset in range(token_length)):
+                continue
+
+            if text[start:start + token_length] != token:
+                continue
+
+            for offset in range(token_length):
+                used[start + offset] = True
+
+            segments.append((start, token_length, vocabulary[token]))
+
+    segments.sort(key=lambda s: s[0])
+
+    result = []
+    position = 0
+    for start, length, token_id in segments:
+        while position < start:
+            result.append(unknown_id)
+            position += 1
+        result.append(token_id)
+        position = start + length
+
+    while position < len(text):
+        result.append(unknown_id)
+        position += 1
+
+    return result
 
 
 def load_vocabulary(vocab_path: str) -> dict[str, int] | None:
@@ -329,6 +377,14 @@ def load_vocabulary(vocab_path: str) -> dict[str, int] | None:
 
     In case of corrupt input arguments, None is returned
     """
+    if not isinstance(vocab_path, str):
+        return None
+    try:
+        with open(vocab_path, encoding="utf-8") as f:
+            vocab = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return None
+    return vocab if isinstance(vocab, dict) else None
 
 
 def encode(
@@ -354,6 +410,26 @@ def encode(
     In case of corrupt input arguments or functions used return None,
     None is returned
     """
+    if (
+        not isinstance(original_text, str)
+        or not isinstance(vocabulary, dict)
+        or not isinstance(unknown_token, str)
+        or (start_of_word_token is not None and not isinstance(start_of_word_token, str))
+        or (end_of_word_token is not None and not isinstance(end_of_word_token, str))
+    ):
+        return None
+
+    result = []
+    for raw_word in original_text.split():
+        prepared = prepare_word(raw_word, start_of_word_token, end_of_word_token)
+        if prepared is None:
+            return None
+        ids = tokenize_word(prepared, vocabulary, end_of_word_token, unknown_token)
+        if ids is None:
+            return None
+        result.extend(ids)
+
+    return result
 
 
 def collect_ngrams(text: str, order: int) -> list[tuple[str, ...]] | None:
