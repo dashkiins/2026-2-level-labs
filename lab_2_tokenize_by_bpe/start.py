@@ -42,8 +42,8 @@ def main() -> None:
     decoded = decoded.replace('\u2581', ' ')
     print(decoded)
 
-   #result = None
-   #assert result, "Translation not working"
+    result = None
+    assert result, "Translation not working"
 
 
 if __name__ == "__main__":

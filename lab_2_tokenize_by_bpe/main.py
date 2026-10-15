@@ -140,7 +140,7 @@ def merge_tokens(
         new_word = []
         i = 0
         while i < len(word):
-            if i < len(word) - 1 and word[i] == pair[0] and word[i + 1] == pair[1]:
+            if word[i: i + 2] == pair:
                 new_word.append(merged)
                 i += 2
             else:
@@ -180,9 +180,8 @@ def train(
         pairs = count_tokens_pairs(word_frequencies)
         if pairs is None or not pairs:
             break
-        # если доступных для слияния пар токенов не осталось, то обучение должно прекратиться
 
-        best_pair = sorted(pairs, key=lambda p: (-pairs[p], -len(p[0] + p[1]), p[0] + p[1]))[0]
+        best_pair = sorted(pairs, key=lambda p: (-pairs[p], -len(''.join(p)), ''.join(p)))[0]
 
         word_frequencies = merge_tokens(word_frequencies, best_pair)
         if word_frequencies is None:
@@ -227,8 +226,7 @@ def get_vocabulary(
     if unknown_token and unknown_token not in all_tokens:
         all_tokens.append(unknown_token)
 
-    all_tokens.sort()
-    all_tokens.sort(key=len, reverse=True)
+    all_tokens.sort(key=lambda t: (-len(t), t))
 
     characters = set()
 
@@ -290,14 +288,14 @@ def decode(
             return None
         if idx not in reversed_vocab:
             return None
-        token = reversed_vocab[idx]
+        result.append(reversed_vocab[idx])
 
-        if end_of_word_token is not None and token == end_of_word_token:
-            result.append(' ')
-        else:
-            result.append(token)
+    decoded = ''.join(result)
 
-    return ''.join(result)
+    if end_of_word_token is not None:
+        decoded = decoded.replace(end_of_word_token, ' ')
+
+    return decoded
 
 
 def tokenize_word(
