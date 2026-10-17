@@ -14,6 +14,7 @@ from lab_2_tokenize_by_bpe.main import (
     encode
 )
 
+
 def main() -> None:
     """
     Launches an implementation

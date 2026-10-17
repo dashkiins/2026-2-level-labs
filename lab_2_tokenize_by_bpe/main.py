@@ -9,6 +9,7 @@ import json
 import os
 from typing import Sequence
 
+
 def prepare_word(
     raw_word: str, start_of_word: str | None, end_of_word: str | None
 ) -> tuple[str, ...] | None:
@@ -140,7 +141,7 @@ def merge_tokens(
         new_word = []
         i = 0
         while i < len(word):
-            if word[i: i + 2] == pair:
+            if word[i:i + 2] == pair:
                 new_word.append(merged)
                 i += 2
             else:
@@ -413,9 +414,10 @@ def encode(
     In case of corrupt input arguments or functions used return None,
     None is returned
     """
+    if not isinstance(vocabulary, dict):
+        return None
     checks = [
         isinstance(original_text, str),
-        isinstance(vocabulary, dict),
         isinstance(unknown_token, str),
         start_of_word_token is None or isinstance(start_of_word_token, str),
         end_of_word_token is None or isinstance(end_of_word_token, str),
