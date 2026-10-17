@@ -4,7 +4,7 @@ Lab 2.
 BPE and machine translation evaluation
 """
 
-# pylint:disable=unused-argument, too-many-locals
+# pylint:disable=unused-argument, too-many-locals, line-too-long, cell-var-from-loop, too-many-return-statements
 import json
 import os
 from typing import Sequence
@@ -183,7 +183,10 @@ def train(
             break
 
         local_pairs = pairs
-        best_pair = sorted(local_pairs, key=lambda p: (-local_pairs[p], -len(''.join(p)), ''.join(p)))[0]
+        best_pair = sorted(
+            local_pairs,
+            key=lambda p: (-local_pairs[p], -len(''.join(p)), ''.join(p))
+        )[0]
 
         word_frequencies = merge_tokens(word_frequencies, best_pair)
         if word_frequencies is None:

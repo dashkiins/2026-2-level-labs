@@ -7,11 +7,11 @@ import json
 
 from lab_2_tokenize_by_bpe.main import (
     collect_frequencies,
-    train,
-    get_vocabulary,
     decode,
+    encode,
+    get_vocabulary,
     load_vocabulary,
-    encode
+    train,
 )
 
 
