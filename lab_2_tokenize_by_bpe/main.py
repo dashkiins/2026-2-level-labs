@@ -7,6 +7,7 @@ BPE and machine translation evaluation
 # pylint:disable=unused-argument
 from typing import Sequence
 import json
+import os
 
 def prepare_word(
     raw_word: str, start_of_word: str | None, end_of_word: str | None
@@ -330,7 +331,7 @@ def tokenize_word(
     segments = []
 
     for token in sorted_tokens:
-        if token == '':
+        if not token:
             continue
 
         token_length = len(token)
@@ -379,11 +380,12 @@ def load_vocabulary(vocab_path: str) -> dict[str, int] | None:
     """
     if not isinstance(vocab_path, str):
         return None
-    try:
-        with open(vocab_path, encoding="utf-8") as f:
-            vocab = json.load(f)
-    except (OSError, json.JSONDecodeError):
+    if not os.path.exists(vocab_path):
         return None
+
+    with open(vocab_path, encoding="utf-8") as f:
+        vocab = json.load(f)
+
     return vocab if isinstance(vocab, dict) else None
 
 
