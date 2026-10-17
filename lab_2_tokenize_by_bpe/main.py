@@ -4,10 +4,10 @@ Lab 2.
 BPE and machine translation evaluation
 """
 
-# pylint:disable=unused-argument
-from typing import Sequence
+# pylint:disable=unused-argument, too-many-locals
 import json
 import os
+from typing import Sequence
 
 def prepare_word(
     raw_word: str, start_of_word: str | None, end_of_word: str | None
@@ -181,7 +181,8 @@ def train(
         if pairs is None or not pairs:
             break
 
-        best_pair = sorted(pairs, key=lambda p: (-pairs[p], -len(''.join(p)), ''.join(p)))[0]
+        local_pairs = pairs
+        best_pair = sorted(local_pairs, key=lambda p: (-local_pairs[p], -len(''.join(p)), ''.join(p)))[0]
 
         word_frequencies = merge_tokens(word_frequencies, best_pair)
         if word_frequencies is None:
@@ -412,13 +413,14 @@ def encode(
     In case of corrupt input arguments or functions used return None,
     None is returned
     """
-    if (
-        not isinstance(original_text, str)
-        or not isinstance(vocabulary, dict)
-        or not isinstance(unknown_token, str)
-        or (start_of_word_token is not None and not isinstance(start_of_word_token, str))
-        or (end_of_word_token is not None and not isinstance(end_of_word_token, str))
-    ):
+    checks = [
+        isinstance(original_text, str),
+        isinstance(vocabulary, dict),
+        isinstance(unknown_token, str),
+        start_of_word_token is None or isinstance(start_of_word_token, str),
+        end_of_word_token is None or isinstance(end_of_word_token, str),
+    ]
+    if not all(checks):
         return None
 
     result = []

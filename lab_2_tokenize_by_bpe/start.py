@@ -30,6 +30,8 @@ def main() -> None:
 
     trained = train(frequencies, 100)
     print(trained)
+    if trained is None:
+        return
 
     vocabulary = get_vocabulary(trained, "<unk>")
     print(vocabulary)
