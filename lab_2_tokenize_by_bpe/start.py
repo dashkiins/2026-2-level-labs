@@ -63,6 +63,11 @@ def main() -> None:
     result = encoded
     assert result, "Translation not working"
 
+    word = 'исследованиеисследование'
+    enc = encode(word, vocab, '\u2581', None, '<unk>')
+    rev_vocab = {v: k for k, v in big_vocab.items()}
+    for token_id in enc:
+        print(rev_vocab[token_id])
 
 if __name__ == "__main__":
     main()

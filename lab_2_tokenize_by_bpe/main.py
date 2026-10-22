@@ -237,12 +237,8 @@ def get_vocabulary(
     for word in word_frequencies:
         for token in word:
             for ch in token:
-                characters.add(ch)
-
-    characters = {
-        ch for ch in characters
-        if ch not in all_tokens
-    }
+                if ch not in all_tokens:
+                    characters.add(ch)
 
     sorted_characters = sorted(characters)
     all_tokens.extend(sorted_characters)
