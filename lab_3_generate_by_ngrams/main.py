@@ -48,19 +48,19 @@ class TextProcessor:
 
         result = []
         text = text.lower()
-        current_word = ""
+        current_word = []
 
         for char in text:
             if char.isalpha():
-                current_word += char
+                current_word.append(char)
             else:
                 if current_word:
-                    result.extend(list(current_word))
+                    result.extend(current_word)
                     result.append(self._end_of_word_token)
-                    current_word = ""
+                    current_word = []
 
         if current_word:
-            result.extend(list(current_word))
+            result.extend(current_word)
 
         return tuple(result)
 
@@ -78,6 +78,10 @@ class TextProcessor:
         In case of corrupt input arguments or arguments not included in storage,
         None is returned
         """
+        if not isinstance(element, str):
+            return None
+        return self._storage.get(element, None)
+
 
     def get_end_of_word_token(self) -> str:  # type: ignore[empty-body]
         """
@@ -86,6 +90,7 @@ class TextProcessor:
         Returns:
             str: EoW token
         """
+
 
     def get_token(self, element_id: int) -> str | None:
         """
@@ -99,6 +104,13 @@ class TextProcessor:
 
         In case of corrupt input arguments or arguments not included in storage, None is returned
         """
+        if not isinstance(element_id, int):
+            return None
+        for token, idx in self._storage.items():
+            if idx == element_id:
+                return token
+        return None
+
 
     def encode(self, text: str) -> tuple[int, ...] | None:
         """
@@ -116,6 +128,23 @@ class TextProcessor:
         In case of corrupt input arguments, None is returned.
         In case any of methods used return None, None is returned.
         """
+        if not isinstance(text, str):
+            return None
+
+        tokens = self._tokenize(text)
+        if tokens is None:
+            return None
+
+        encoded = []
+        for token in tokens:
+            self._put(token)
+            token_id = self.get_id(token)
+            if token_id is None:
+                return None
+            encoded.append(token_id)
+
+        return tuple(encoded)
+
 
     def _put(self, element: str) -> None:
         """
@@ -127,6 +156,12 @@ class TextProcessor:
         In case of corrupt input arguments or invalid argument length,
         an element is not added to storage
         """
+        if not isinstance(element, str) or len(element) != 1:
+            return
+
+        if element not in self._storage:
+            self._storage[element] = len(self._storage)
+
 
     def decode(self, encoded_corpus: tuple[int, ...]) -> str | None:
         """
