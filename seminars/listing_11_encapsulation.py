@@ -10,33 +10,6 @@ Encapsulation.
 
 
 class BankAccount:
-    def __init__(self, owner, balance):
-        self.__owner = owner
-        self.__balance = balance
-    def get_balance(self):
-        return self.__balance
-    def update_balance(self, amount):
-        self.__balance += amount
-    def validate_transaction(self, amount):
-        if type(amount) in (int, float) and amount > 0:
-            return True
-        return False
-    def deposit(self, amount):
-        if self.validate_transaction(amount):
-            self.update_balance(amount)
-            print(f'Счет пополнен на {amount}. Текущий баланс: {self.__balance}')
-        else:
-            print("Error")
-    def withdraw(self, amount):
-        if not self.validate_transaction(amount):
-            print('Ошибка. Сумма должна быть больше нуля')
-            return
-        if self.__balance >= amount:
-            self.__balance -= amount
-            print(f'Снято {amount}. Остаток: {self.__balance}')
-        else:
-            print('Недостаточно средств')
-
     """
     Represents a bank account.
 
@@ -59,23 +32,6 @@ class BankAccount:
 
 
 class Bank:
-    def __init__(self, name, accounts, next_account_number):
-        self.name = name
-        self.accounts = {}
-        self.next_account_number = 1000
-    def generate_account_number(self):
-        current_number = self.generate_account_number
-        self.next_account_number += 1
-        return current_number
-    def create_account(self, owner_name):
-        acc_num = self.generate_account_number()
-        new_account = BankAccount(owner_name)
-        self.accounts[acc_num] = new_account
-        print(f'Создан счет {acc_num} для {owner_name}')
-        return new_account
-    def deposit_to_account(self, account_number, amount):
-        if account_number in self.accounts:
-
     """
     Represents a bank that manages accounts and provides financial services.
 
