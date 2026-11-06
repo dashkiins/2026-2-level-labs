@@ -21,17 +21,9 @@ class Vehicle:
         move() -> None:
             Simulates vehicle movement.
     """
-    def __init__(self, max_speed, colour):
-        self.max_speed = max_speed
-        self.colour = colour
-    def move(self) -> None:
-        print(f'Максимальная скорость: {self.max_speed}, цвет: {self.colour}')
-v = Vehicle(50, 'red')
-v.move()
 
 
-
-class Car(Vehicle):
+class Car:
     """
     Represents a car, which is a type of vehicle.
 
@@ -46,18 +38,9 @@ class Car(Vehicle):
         stay() -> None:
             Simulates stopping the car.
     """
-    def __init__(self, max_speed, colour, fuel):
-        super().__init__(max_speed, colour)
-        self.fuel = fuel
-    def stay(self) -> None:
-        print('Car has stopped')
-c = Car(50, 'red', 'petrol')
-c.move()
-c.stay()
 
 
-
-class Bicycle(Vehicle):
+class Bicycle:
     """
     Represents a bicycle, which is a type of vehicle.
 
@@ -72,20 +55,9 @@ class Bicycle(Vehicle):
         freestyle() -> None:
             Simulates performing a freestyle trick.
     """
-    def __init__(self, number_of_wheels, colour, max_speed):
-        super().__init__(max_speed, colour)
-        self.number_of_wheels = number_of_wheels
-    def move(self) -> None:
-        print('movement')
-    def freestyle(self) -> None:
-        print('bunny hop')
-b = Bicycle(4, 'red', 25)
-b.move()
-b.freestyle()
 
 
-
-class Aircraft(Vehicle):
+class Aircraft:
     """
     Represents an aircraft, which is a type of vehicle.
 
@@ -98,14 +70,6 @@ class Aircraft(Vehicle):
         move() -> None:
             Simulates aircraft movement.
     """
-    def __init__(self, number_of_engines, colour, max_speed):
-        super().__init__(max_speed, colour)
-        self.number_of_engines = number_of_engines
-    def move(self) -> None:
-        print(f'Воздушное судно с {self.number_of_engines} двигателями {self.colour} цвета летает {self.max_speed} км.ч')
-a = Aircraft(2, 'red', 60)
-a.move()
-
 
 
 def main() -> None:
