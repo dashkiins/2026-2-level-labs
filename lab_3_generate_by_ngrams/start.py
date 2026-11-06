@@ -4,7 +4,13 @@ Generation by NGrams starter
 
 # pylint:disable=too-many-locals, unused-import, unused-variable
 
-from lab_3_generate_by_ngrams.main import TextProcessor, NGramLanguageModel, GreedyTextGenerator
+import json
+
+from lab_3_generate_by_ngrams.main import (
+    GreedyTextGenerator,
+    NGramLanguageModel,
+    TextProcessor,
+)
 
 def main() -> None:
     """
