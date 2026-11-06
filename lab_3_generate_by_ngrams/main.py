@@ -49,11 +49,13 @@ class TextProcessor:
         text = text.lower()
         result = []
         current_word = []
+        last_char = ''
 
         for char in text:
+            last_char = char
             if char.isalpha():
                 current_word.append(char)
-            else:
+            elif char.isspace():
                 if current_word:
                     result.extend(current_word)
                     result.append(self._end_of_word_token)
@@ -61,6 +63,8 @@ class TextProcessor:
 
         if current_word:
             result.extend(current_word)
+            if not last_char.isalpha() and not last_char.isdigit() and not last_char.isspace():
+                result.append(self._end_of_word_token)
 
         if not result:
             return None
@@ -365,7 +369,7 @@ class NGramLanguageModel:
             return False
 
         n_grams = self._extract_n_grams(self._encoded_corpus)
-        if n_grams is None:
+        if not n_grams:
             return False
 
         counts = {}
@@ -375,6 +379,7 @@ class NGramLanguageModel:
             context = gram[:-1]
             context_counts[context] = context_counts.get(context, 0) + 1
 
+        self._n_gram_frequencies = {}
         for gram, count in counts.items():
             context = gram[:-1]
             self._n_gram_frequencies[gram] = count / context_counts[context]
@@ -424,7 +429,7 @@ class NGramLanguageModel:
             return None
 
         n = self.__n_gram_size
-        if len(encoded_corpus) < n:
+        if len(encoded_corpus) <= n:
             return None
 
         n_grams = []
