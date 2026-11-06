@@ -4,7 +4,7 @@ Generation by NGrams starter
 
 # pylint:disable=too-many-locals, unused-import, unused-variable
 
-from lab_3_generate_by_ngrams.main import TextProcessor
+from lab_3_generate_by_ngrams.main import TextProcessor, NGramLanguageModel
 
 def main() -> None:
     """
@@ -29,7 +29,21 @@ def main() -> None:
     else:
         result = None
 
+
+    encoded_for_model = processor.encode(text)
+
+    if encoded_for_model is not None:
+        model = NGramLanguageModel(encoded_for_model, 3)
+        is_built = model.build()
+
+        print("Модель:", is_built)
+        print("Частотный словарь n-грамм:")
+        print(model._n_gram_frequencies)
+    else:
+        print("Не удалось закодировать текст для модели")
+
     assert result
+
 
 
 if __name__ == "__main__":
