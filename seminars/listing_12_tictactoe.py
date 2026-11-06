@@ -24,6 +24,10 @@ class Move:
     Instance methods:
         N/A
     """
+    def __init__(self, row, col, label):
+        self.row = row
+        self.col = col
+        self.label = label
 
 
 class Player:

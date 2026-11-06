@@ -4,7 +4,7 @@ Generation by NGrams starter
 
 # pylint:disable=too-many-locals, unused-import, unused-variable
 
-from lab_3_generate_by_ngrams.main import TextProcessor, NGramLanguageModel
+from lab_3_generate_by_ngrams.main import TextProcessor, NGramLanguageModel, GreedyTextGenerator
 
 def main() -> None:
     """
@@ -39,8 +39,15 @@ def main() -> None:
         print("Модель:", is_built)
         print("Частотный словарь n-грамм:")
         print(model._n_gram_frequencies)
-    else:
-        print("Не удалось закодировать текст для модели")
+
+
+    if encoded_for_model is not None:
+        model_7 = NGramLanguageModel(encoded_for_model, 7)
+        model_7.build()
+        greedy_generator = GreedyTextGenerator(model_7, processor)
+        generated_text = greedy_generator.run('Vernon', 51)
+        print('Result:')
+        print(generated_text)
 
     assert result
 
