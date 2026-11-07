@@ -48,22 +48,13 @@ class TextProcessor:
 
         text = text.lower()
         result = []
-        current_word = []
-        last_char = ''
 
-        for char in text:
-            last_char = char
-            if char.isalpha():
-                current_word.append(char)
-            elif char.isspace():
-                if current_word:
-                    result.extend(current_word)
-                    result.append(self._end_of_word_token)
-                    current_word = []
+        words = text.split()
+        for word in words:
+            current_word = [char for char in word if char.isalpha()]
 
-        if current_word:
-            result.extend(current_word)
-            if not last_char.isalpha() and not last_char.isdigit() and not last_char.isspace():
+            if current_word:
+                result.extend(current_word)
                 result.append(self._end_of_word_token)
 
         if not result:
@@ -86,7 +77,7 @@ class TextProcessor:
         """
         if not isinstance(element, str):
             return None
-        return self._storage.get(element, None)
+        return self._storage.get(element)
 
 
     def get_end_of_word_token(self) -> str:  # type: ignore[empty-body]
@@ -246,15 +237,9 @@ class TextProcessor:
         if not isinstance(decoded_corpus, tuple) or not decoded_corpus:
             return None
 
-        text = ""
-        for ch in decoded_corpus:
-            if ch == self._end_of_word_token:
-                text += " "
-            else:
-                text += ch
-
-        text = text.strip() + "."
-        return text.capitalize()
+        text = "".join(decoded_corpus)
+        text = text.replace(self._end_of_word_token, ' ')
+        return (text.strip() + '.').capitalize()
 
 
 class WordProcessor(TextProcessor):
@@ -381,8 +366,7 @@ class NGramLanguageModel:
 
         self._n_gram_frequencies = {}
         for gram, count in counts.items():
-            context = gram[:-1]
-            self._n_gram_frequencies[gram] = count / context_counts[context]
+            self._n_gram_frequencies[gram] = count / context_counts[gram[:-1]]
 
         return True
 
@@ -428,13 +412,12 @@ class NGramLanguageModel:
         if not isinstance(encoded_corpus, tuple) or not encoded_corpus:
             return None
 
-        n = self.__n_gram_size
-        if len(encoded_corpus) <= n:
+        if len(encoded_corpus) <= self.__n_gram_size:
             return None
 
         n_grams = []
-        for i in range(len(encoded_corpus) - n + 1):
-            n_grams.append(encoded_corpus[i : i + n])
+        for i in range(len(encoded_corpus) - self.__n_gram_size + 1):
+            n_grams.append(encoded_corpus[i : i + self.__n_gram_size])
 
         return tuple(n_grams)
 
@@ -475,7 +458,7 @@ class GreedyTextGenerator:
         In case of corrupt input arguments or methods used return None,
         None is returned
         """
-        if not isinstance(prompt, str) or not isinstance(seq_len, int) or seq_len <= 0:
+        if not isinstance(prompt, str) or not isinstance(seq_len, int) or seq_len <= 0 or not prompt:
             return None
 
         encoded_prompt = self._text_processor.encode(prompt)
