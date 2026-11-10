@@ -45,9 +45,6 @@ def main() -> None:
         is_built = model.build()
 
         print("Модель:", is_built)
-        print("Частотный словарь n-грамм:")
-        print(model._n_gram_frequencies)
-
 
     if encoded_for_model is not None:
         model_7 = NGramLanguageModel(encoded_for_model, 7)
