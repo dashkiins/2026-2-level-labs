@@ -459,7 +459,12 @@ class GreedyTextGenerator:
         In case of corrupt input arguments or methods used return None,
         None is returned
         """
-        if not isinstance(prompt, str) or not isinstance(seq_len, int) or seq_len <= 0 or not prompt:
+        if (
+            not isinstance(prompt, str)
+            or not isinstance(seq_len, int)
+            or seq_len <= 0
+            or not prompt
+        ):
             return None
 
         encoded_prompt = self._text_processor.encode(prompt)
@@ -640,7 +645,12 @@ class BeamSearchTextGenerator:
         In case of corrupt input arguments or methods used return None,
         None is returned
         """
-        if not isinstance(prompt, str) or not isinstance(seq_len, int) or seq_len <= 0 or not prompt:
+        if (
+            not isinstance(prompt, str)
+            or not isinstance(seq_len, int)
+            or seq_len <= 0
+            or not prompt
+        ):
             return None
 
         encoded_prompt = self._text_processor.encode(prompt)
