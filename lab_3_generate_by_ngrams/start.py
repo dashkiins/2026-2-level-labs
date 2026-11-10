@@ -7,6 +7,7 @@ Generation by NGrams starter
 import json
 
 from lab_3_generate_by_ngrams.main import (
+    BeamSearchTextGenerator,
     GreedyTextGenerator,
     NGramLanguageModel,
     TextProcessor,
@@ -55,6 +56,15 @@ def main() -> None:
         generated_text = greedy_generator.run('Vernon', 51)
         print('Result:')
         print(generated_text)
+
+    if encoded_for_model is not None:
+        model_beam = NGramLanguageModel(encoded_for_model, 7)
+        model_beam.build()
+        beam_generator = BeamSearchTextGenerator(model_beam, processor, beam_width=3)
+        beam_result = beam_generator.run('Vernon', 56)
+        print('Result of Beam Search:')
+        print(beam_result)
+        result = beam_result
 
     assert result
 
