@@ -526,8 +526,10 @@ class BeamSearcher:
         if not candidates:
             return []
 
-        sorted_candidates = sorted(candidates.items(), key=lambda x: (x[1], x[0]))
-        return sorted_candidates[-self._beam_width:][::-1]
+        sorted_candidates = sorted(
+            candidates.items(), key=lambda x: (x[1], x[0]), reverse=True
+        )
+        return sorted_candidates[:self._beam_width]
 
 
     def continue_sequence(
@@ -564,16 +566,14 @@ class BeamSearcher:
             return None
 
         new_candidates = {}
-        current_penalty = sequence_candidates[sequence]
-
         for token, prob in next_tokens:
             new_seq = sequence + (token,)
-            new_penalty = current_penalty - math.log(prob)
+            new_penalty = sequence_candidates[sequence] - math.log(prob)
             new_candidates[new_seq] = new_penalty
 
-        updated_candidates = {k: v for k, v in sequence_candidates.items() if k != sequence}
-        updated_candidates.update(new_candidates)
-        return updated_candidates
+        sequence_candidates.pop(sequence, None)
+        sequence_candidates.update(new_candidates)
+        return sequence_candidates
 
 
     def prune_sequence_candidates(
@@ -657,7 +657,7 @@ class BeamSearchTextGenerator:
         if not encoded_prompt:
             return None
 
-        sequence_candidates = {tuple(encoded_prompt): 0.0}
+        sequence_candidates = {encoded_prompt: 0.0}
 
         for _ in range(seq_len - 1):
             new_candidates = {}
@@ -671,11 +671,8 @@ class BeamSearchTextGenerator:
                     new_candidates[sequence] = penalty
                     continue
 
-                temp_candidates = {sequence: penalty}
-                extended = (
-                    self.beam_searcher.continue_sequence(
-                        sequence, next_tokens, temp_candidates
-                    )
+                extended = self.beam_searcher.continue_sequence(
+                    sequence, next_tokens, {sequence: penalty}
                 )
 
                 if extended:
