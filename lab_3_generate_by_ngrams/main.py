@@ -5,7 +5,6 @@ Beam-search and natural language generation evaluation
 """
 
 # pylint:disable=too-few-public-methods
-import math
 
 import json
 import math
@@ -427,7 +426,6 @@ class NGramLanguageModel:
         if not isinstance(frequencies, dict) or not frequencies:
             return
         self._n_gram_frequencies = frequencies
-
 
     def build(self) -> bool:
         """
