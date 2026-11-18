@@ -74,6 +74,10 @@ class Sentence:
             text (str): Text of the sentence.
             position (int): Position of the sentence in the text.
         """
+        if not isinstance(text, str) or not isinstance(position, int):
+            raise IncorrectArgumentError("Incorrect input value")
+        if not text:
+            raise IncorrectArgumentError("Incorrect input value")
         self._text = text
         self._position = position
         self._preprocessed = ()
@@ -124,6 +128,13 @@ class Sentence:
         Args:
             encoded_sentence (EncodedSentence): Encoded sequence of integers.
         """
+        if not isinstance(encoded_sentence, (tuple, list)):
+            raise IncorrectArgumentError("Incorrect input value")
+        for token in encoded_sentence:
+            if not isinstance(token, int) or isinstance(token, bool):
+                raise IncorrectArgumentError("Incorrect input value")
+            self._encoded = tuple(encoded_sentence)
+
 
     def get_preprocessed(self) -> PreprocessedSentence:
         """
@@ -134,6 +145,7 @@ class Sentence:
         """
         return self._preprocessed
 
+
     def set_preprocessed(self, preprocessed_sentence: PreprocessedSentence) -> None:
         """
         Sets the preprocessed representation of the sentence.
@@ -141,7 +153,13 @@ class Sentence:
         Args:
             preprocessed_sentence (PreprocessedSentence): Preprocessed sequence of tokens.
         """
-        return self._preprocessed
+        if not isinstance(preprocessed_sentence, (tuple, list)):
+            raise IncorrectArgumentError("Incorrect input value")
+        for token in preprocessed_sentence:
+            if not isinstance(token, str):
+                raise IncorrectArgumentError("Incorrect input value")
+            self._prepocessed = tuple(preprocessed_sentence)
+
 
     def get_position(self) -> int:
         """
@@ -151,6 +169,7 @@ class Sentence:
             int: Position of the sentence.
         """
         return self._position
+
 
     def get_text(self) -> str:
         """
