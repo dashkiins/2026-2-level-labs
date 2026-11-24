@@ -3,7 +3,11 @@ TextRank summarizer starter
 """
 
 # pylint:disable=unused-variable, unused-import, duplicate-code
+
+
 import string
+
+
 from lab_4_summarization_textrank.main import SentenceEncoder, SentencePreprocessor, calculate_similarity
 
 def main() -> None:
