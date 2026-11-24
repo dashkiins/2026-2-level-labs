@@ -356,6 +356,10 @@ class SentenceEncoder:
         """
         Initializes the sentence encoder.
         """
+        self._word2id = {}
+        self._id2word = {}
+        self.last = 999
+
 
     def __str__(self) -> str:
         """
@@ -364,6 +368,8 @@ class SentenceEncoder:
         Returns:
             str: String representation of the encoder.
         """
+        return f"SentenceEncoder(vocabulary_size={len(self._word2id)})"
+
 
     def _learn_indices(self, tokens: Sequence[str]) -> None:
         """
@@ -372,6 +378,18 @@ class SentenceEncoder:
         Args:
             tokens (Sequence[str]): Sequence of string tokens.
         """
+        if not isinstance(tokens, (tuple, list)):
+            raise IncorrectArgumentError("Incorrect input value")
+        for token in tokens:
+            if not isinstance(token, str):
+                raise IncorrectArgumentError("Incorrect input value")
+
+        for token in tokens:
+            if token not in self._word2id:
+                self.last += 1
+                self._word2id[token] = self.last
+                self._id2word[self.last] = token
+
 
     def encode_sentences(self, sentences: Sequence[Sentence]) -> None:
         """
@@ -380,6 +398,17 @@ class SentenceEncoder:
         Args:
             sentences (Sequence[Sentence]): Sequence of sentences to encode.
         """
+        if not isinstance(sentences, (tuple, list)):
+            raise IncorrectArgumentError("Incorrect input value")
+        for sentence in sentences:
+            if not isinstance(sentence, Sentence):
+                raise IncorrectArgumentError("Incorrect input value")
+
+        for sentence in sentences:
+            preprocessed = sentence.get_preprocessed()
+            self._learn_indices(preprocessed)
+            encoded = tuple(self._word2id[token] for token in preprocessed)
+            sentence.set_encoded(encoded)
 
 
 def calculate_similarity(sequence: Sequence, other_sequence: Sequence) -> float:
@@ -393,6 +422,19 @@ def calculate_similarity(sequence: Sequence, other_sequence: Sequence) -> float:
     Returns:
         float: Jaccard similarity score between the two sequences.
     """
+    if not isinstance(sequence, (tuple, list)) or not isinstance(other_sequence, (tuple, list)):
+        raise IncorrectArgumentError("Incorrect input value")
+
+    if not sequence or not other_sequence:
+        return 0.0
+
+    set1 = set(sequence)
+    set2 = set(other_sequence)
+
+    intersection = len(set1.intersection(set2))
+    union = len(set1.union(set2))
+
+    return intersection / union
 
 
 class TextGraph:
